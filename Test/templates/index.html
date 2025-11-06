@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Election Results{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Election Results Portal</h1>
+    <p>Real-time election results from polling units across all Local Government Areas</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>{{ total_units }}</h3>
+        <p>Polling Units</p>
+    </div>
+    <div class="stat-card">
+        <h3>{{ total_lgas }}</h3>
+        <p>Local Government Areas</p>
+    </div>
+    <div class="stat-card">
+        <h3>4</h3>
+        <p>Political Parties</p>
+    </div>
+</div>
+
+<div class="recent-results">
+    <h2>Recent Results</h2>
+    <div class="results-grid">
+        {% for result in recent_results %}
+        <div class="result-card">
+            <h4>{{ result.unit.name }}</h4>
+            <p class="lga-badge">{{ result.unit.lga }}</p>
+            <div class="result-stats">
+                <span>{{ result.total_votes }} total votes</span>
+                <span>{{ result.parties }} parties</span>
+            </div>
+            <a href="{{ url_for('polling_unit', unit_id=result.unit.id) }}" class="btn btn-sm">
+                View Details
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="quick-actions">
+    <h2>Quick Actions</h2>
+    <div class="action-buttons">
+        <a href="{{ url_for('polling_unit') }}" class="btn btn-primary">
+            View Polling Unit Results
+        </a>
+        <a href="{{ url_for('lga_summary') }}" class="btn btn-secondary">
+            Check LGA Summary
+        </a>
+        <a href="{{ url_for('new_result') }}" class="btn btn-success">
+            Add New Results
+        </a>
+    </div>
+</div>
+{% endblock %}

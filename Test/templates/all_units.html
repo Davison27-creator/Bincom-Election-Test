@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}All Polling Units{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>All Polling Units</h1>
+    <p>Total: {{ units|length }} units</p>
+</div>
+
+<div class="content-card">
+    <table style="width: 100%;">
+        <tr>
+            <th>ID</th>
+            <th>Polling Unit</th>
+            <th>LGA</th>
+            <th>Total Votes</th>
+            <th>Parties</th>
+            <th>Action</th>
+        </tr>
+        {% for unit_data in units %}
+        <tr>
+            <td>{{ unit_data.unit.id }}</td>
+            <td>{{ unit_data.unit.name }}</td>
+            <td>{{ unit_data.unit.lga }}</td>
+            <td>{{ unit_data.total_votes }}</td>
+            <td>{{ unit_data.party_count }}</td>
+            <td>
+                <a href="{{ url_for('polling_unit', unit_id=unit_data.unit.id) }}" style="color: #007bff; text-decoration: none;">
+                    View Results
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

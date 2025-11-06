@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Results{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Add New Results</h1>
+</div>
+
+<div class="content-card">
+    <form method="POST">
+        <div style="margin-bottom: 15px;">
+            <label>Polling Unit:</label>
+            <select name="unit_id" required style="width: 100%; padding: 8px;">
+                <option value="">-- Select Unit --</option>
+                {% for unit in units %}
+                <option value="{{ unit.id }}">{{ unit.name }} - {{ unit.lga }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label>Party Name:</label>
+            <input type="text" name="party_name" required placeholder="e.g., PDP, APC, LP" style="width: 100%; padding: 8px;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label>Votes:</label>
+            <input type="number" name="votes" required min="0" placeholder="Enter number of votes" style="width: 100%; padding: 8px;">
+        </div>
+
+        <button type="submit" style="background: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Add Results
+        </button>
+        
+        <a href="{{ url_for('index') }}" style="padding: 10px 20px; margin-left: 10px; text-decoration: none; background: #6c757d; color: white; border-radius: 5px;">
+            Cancel
+        </a>
+    </form>
+</div>
+{% endblock %}

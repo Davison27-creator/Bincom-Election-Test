@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}LGA Summary{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>LGA Summary</h1>
+</div>
+
+<div class="content-card">
+    <form method="GET">
+        <label>Select LGA:</label>
+        <select name="lga" onchange="this.form.submit()">
+            <option value="">-- Choose LGA --</option>
+            {% for lga in lgas %}
+            <option value="{{ lga }}" {% if selected_lga == lga %}selected{% endif %}>
+                {{ lga }}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if selected_lga %}
+        <h2>{{ selected_lga }} Results</h2>
+        
+        {% if party_totals %}
+        <table>
+            <tr>
+                <th>Party</th>
+                <th>Votes</th>
+                <th>%</th>
+            </tr>
+            {% for party, votes in party_totals.items() %}
+            <tr>
+                <td>{{ party }}</td>
+                <td>{{ votes }}</td>
+                <td>{{ "%.1f"|format((votes / total_votes * 100)) }}%</td>
+            </tr>
+            {% endfor %}
+            <tr style="font-weight: bold;">
+                <td>Total</td>
+                <td>{{ total_votes }}</td>
+                <td>100%</td>
+            </tr>
+        </table>
+
+        <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+            <strong>Leading Party: {{ leading_party[0] }}</strong> with {{ leading_party[1] }} votes
+        </div>
+        {% else %}
+        <p>No results found for {{ selected_lga }}.</p>
+        {% endif %}
+    {% else %}
+        <p>Please select an LGA to view results.</p>
+    {% endif %}
+</div>
+{% endblock %}

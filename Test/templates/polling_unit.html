@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Polling Unit Results{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Polling Unit Results</h1>
+    <p>View detailed results for individual polling units</p>
+</div>
+
+<div class="content-card">
+    <form method="GET" class="filter-form">
+        <label for="unit_id">Select Polling Unit:</label>
+        <select name="unit_id" id="unit_id" onchange="this.form.submit()">
+            <option value="">-- Choose a Polling Unit --</option>
+            {% for unit in units %}
+            <option value="{{ unit.id }}" 
+                    {% if selected_unit and selected_unit.id == unit.id %}selected{% endif %}>
+                {{ unit.name }} - {{ unit.lga }}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if selected_unit %}
+    <div class="results-section">
+        <h2>{{ selected_unit.name }}</h2>
+        <p class="lga-tag">LGA: {{ selected_unit.lga }}</p>
+        
+        {% if results %}
+        <div class="results-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Political Party</th>
+                        <th>Votes</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set total_votes = results|sum(attribute='votes') %}
+                    {% for result in results %}
+                    <tr>
+                        <td>{{ result.party_name }}</td>
+                        <td>{{ result.votes }}</td>
+                        <td>{{ "%.1f"|format((result.votes / total_votes * 100) if total_votes > 0 else 0) }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td><strong>Total Votes</strong></td>
+                        <td colspan="2"><strong>{{ total_votes }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        {% else %}
+        <div class="no-results">
+            <p>No results available for this polling unit.</p>
+            <a href="{{ url_for('new_result') }}?unit_id={{ selected_unit.id }}" class="btn btn-success">
+                Add Results
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
